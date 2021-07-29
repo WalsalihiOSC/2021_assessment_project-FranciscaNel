@@ -10,11 +10,14 @@ class Student:
         self.student_name = sn
         #self.student_score = ss
         #self.student_attempts = sa
-        self.questiontypes = [] 
+        self.selected_questiontype = [] 
+        self.selected_difficulty = []
         #self.questiontypes = qt
 
         self.qtypes = ['Addition +','Subtraction -','Times x','Division ÷']
+        self.difficulties = ['Easy','Intermediate','Hard']
 
     # These variables would be for recording the personal leaderboard
         #self.student_attempts = len(self.scores_list)
         #self.scores_list = []
+
