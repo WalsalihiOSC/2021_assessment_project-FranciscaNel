@@ -20,11 +20,14 @@ class Interface:
 ######### PAGE 1 ########
 ####### Name Page #######
 
+        root.grid_columnconfigure(0, weight=1)
+        root.grid_rowconfigure(0, weight=1)
+
         self.name_page = Frame(root, bg='#EEEEEE')
         self.formatting(self.name_page)
        
     # OSC logo displayed using PhotoImage.
-        self.img = PhotoImage(file="OJC_logo3.gif")
+        self.img = PhotoImage(file="OPS_logo3.gif")
         self.logotitle = Label(self.name_page, image=self.img, bg='#EEEEEE')
         self.logotitle.photo = self.img
         self.logotitle.grid()
@@ -50,7 +53,9 @@ class Interface:
 # Formats each page with the same font and grids it
     def formatting(self,page):
         page.option_add('*Font', 'CenturyGothic 24 bold')
-        page.grid(row=0,column=0,padx=(170,0))
+        page.grid(padx=(170,0))
+        page.grid_columnconfigure(0, weight=1)
+        page.grid_rowconfigure(0, weight=1)
 
 # Next page function- forgets the current page
     def next_page(self,cpage):
@@ -157,7 +162,7 @@ class Interface:
         self.page = Frame(root, bg='#EEEEEE')
         self.formatting(self.page)
     # Question title
-        Label(self.page,text="Question {}".format(self.f),bg='#efefef',fg='#ff9900',font='CenturyGothic 48 bold').grid(row=1)
+        Label(self.page,text="Question {}".format(self.f),bg='#efefef',fg='#ff9900',font='CenturyGothic 48 bold').grid(row=1,padx=(50,0))
     # Answer text box
         self.answer = Entry(self.page, bg="#434343", fg='#efefef', border=0, highlightbackground = "#434343", highlightthickness=5,width=5)
         self.answer.grid(row=2,column=1)
@@ -272,7 +277,7 @@ class Interface:
         Label(self.results_page,text="Results\n{} on {} Difficulty".format(self.questiontype,self.difficulty),bg='#efefef',fg='#ff9900',font='CenturyGothic 35 bold').grid(row=1)
     # Results subheader
         if self.score > 4:
-            Label(self.results_page,text="Good job {}, you got {}/10 answers correct".format(self.student.student_name,self.score),bg='#efefef',fg='#434343').grid(row=2)
+            Label(self.results_page,text="Good job {}, you got {}/10 answers correct".format(self.student.student_name,self.score),bg='#efefef',fg='#434343').grid(row=2,pady=(0,50))
         elif self.score < 5:
             Label(self.results_page,text="Practice makes perfect {},\nyou got {}/10 answers correct".format(self.student.student_name,self.score),bg='#efefef',fg='#434343').grid(row=2)
     # restart/logout buttons
