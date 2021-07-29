@@ -1,7 +1,7 @@
 # CSC3 2021
 # Ormiston Computing Interface Class
 # Francisca Nel
-# Ver 5
+# Ver 9
 
 import random # for generating random numbers for the math questions
 from Francisca_OrmistonMathsStudent import Student 
@@ -15,8 +15,10 @@ root.geometry("880x495") # small 16:9 ratio window (55x)
 class Interface:
     def __init__(self):
 
+######################################################################
 
-####### PAGE 1 #######
+######### PAGE 1 ########
+####### Name Page #######
 
         self.name_page = Frame(root, bg='#EEEEEE')
         self.formatting(self.name_page)
@@ -37,9 +39,6 @@ class Interface:
     # Buttons
         Button(self.name_page,command=lambda:[self.check_name_input(self.name_page),self.selection()], text="Next",fg='#434343',bg="#78c043", border=0, height=1, width=8).grid(row=3,column=2,pady=(50,0))
 
-
-####### FUNCTIONS TO BE USED #######
-
 # Checks if the name has input. (there is no checking of integer input in the name)
     def check_name_input(self,cpage):
         if not self.student_name.get():
@@ -48,7 +47,7 @@ class Interface:
             self.get_name()
             self.next_page(cpage)
 
-# Formats each page with the same font and packs it
+# Formats each page with the same font and grids it
     def formatting(self,page):
         page.option_add('*Font', 'CenturyGothic 24 bold')
         page.grid(row=0,column=0,padx=(170,0))
@@ -62,31 +61,35 @@ class Interface:
         sn = self.student_name.get()
         self.student = Student(sn)
 
+######################################################################
 
-####### PAGE 2 #######
+##########  PAGE 2  #########
+####### Selection Page ######
 
     def selection(self):
+        self.f=1
         self.selection_page = Frame(root, bg='#EEEEEE')
         self.formatting(self.selection_page)
         self.selection_page.grid_configure(padx=(0,0),pady=(20,0))
         print('name is:',self.student.student_name) # checking if name is saved to student class
-
         self.qtypesbuttons = [] # qtypes = question types, i.e: addition, subtraction...
         self.diffbuttons = [] # diff = difficulty, i.e: easy, hard...
 
     # Button selection for question types
         self.selectionfunc(self.student.qtypes,self.qtypesbuttons,self.student.selected_questiontype,1,self.student.selected_questiontypes)
+        Label(self.selection_page,fg='#434343',text='Questions').grid(row=0,column=2)
     # Button selection for difficulties
-        self.selectionfunc(self.student.difficulties,self.diffbuttons,self.student.selected_difficulty,2,self.student.selected_difficulties)
+        Label(self.selection_page,fg='#434343',text='Difficulties').grid(row=2,column=2,pady=(50,0))
+        self.selectionfunc(self.student.difficulties,self.diffbuttons,self.student.selected_difficulty,3,self.student.selected_difficulties)
     # next button
-        Button(self.selection_page,command=lambda:[self.check_qbutton_selected(self.selection_page),self.question1()], text="Next",fg='#434343',bg="#78c043", border=0, height=1, width=8).grid(row=3,column=4,pady=(50,0))
+        Button(self.selection_page,command=lambda:[self.check_qbutton_selected(self.selection_page),self.turnstr(),self.questions()], text="Next",fg='#434343',bg="#78c043", border=0, height=1, width=8).grid(row=4,column=4,pady=(50,0))
 
 # Function for selection of buttons to be used with question types and difficulties
     def selectionfunc(self,to_select,buttonlist,selection,row,classlist):
-    # labels 
+    # Selection Buttons 
         i = 0 # index
         c = 0 # column
-        r = row # row
+        r = row 
 
         for i in range(len(to_select)):
             t = to_select[i]
@@ -95,7 +98,7 @@ class Interface:
                 c = c + 1
 
             buttonlist[i].grid(column=c, row=r, padx=(8),pady=8)
-            buttonlist[i].config(width=10,bg="#ff9900", fg='#434343', border=0, highlightthickness=4)
+            buttonlist[i].config(width=10,height=1,bg="#ff9900", fg='#434343', border=0, highlightthickness=5)
 
 # checks if button is pressed by detecting button colour as green or orange
     def button_pressed(self,sel,to_select,buttonlist,selection,classlist):
@@ -139,210 +142,40 @@ class Interface:
         elif self.questiontype=='Subtraction -':
             self.questiontypeforq = self.subtraction(page)
 
-######################################################################
-#  THIS LONG CODE IS TEMPORARY AND WILL BE SIMPLIFIED IN THE FUTURE  #
-######################################################################
-
-######### PAGE 3 #########
-####### Question 1 #######
-    def question1(self):
-        self.question1_page = Frame(root, bg='#EEEEEE')
-        self.formatting(self.question1_page)
+    def turnstr(self):
     # turning questiontype and difficulty into string
         self.questiontype = str(self.student.selected_questiontype[0])
         self.difficulty = str(self.student.selected_difficulty[0])
         print(self.questiontype,'\n',self.difficulty)
-    # determines type of question to be used in the rest of the 10 questions
-        self.questiontypeforquestions(self.question1_page)
-
-    # Question title
-        Label(self.question1_page,text="Question 1",bg='#efefef',fg='#ff9900',font='CenturyGothic 48 bold').grid(row=1)
-    # Answer text box
-        self.answer = Entry(self.question1_page, bg="#434343", fg='#efefef', border=0, highlightbackground = "#434343", highlightthickness=5,width=5)
-        self.answer.grid(row=2,column=1)
-    # Next button hidden under check button
-        Button(self.question1_page,command= lambda:[self.next_page(self.question1_page),self.question2()], text="Next",fg='#434343',bg="#78c043", border=0, height=1, width=8).grid(row=3,column=2,pady=(50,0))
-    # Check button
-        self.checkbutton = Button(self.question1_page,command=lambda:[self.checkanswer(self.question1_page)], text="Check",fg='#434343',bg="#78c043", border=0, height=1, width=8)
-        self.checkbutton.grid(row=3,column=2,pady=(50,0))
-
-######### PAGE 4 #########
-####### Question 2 #######
-
-    def question2(self):
-        self.question2_page = Frame(root, bg='#EEEEEE')
-        self.formatting(self.question2_page)
-
-    # Question title
-        Label(self.question2_page,text="Question 2",bg='#efefef',fg='#ff9900',font='CenturyGothic 48 bold').grid(row=1)
-    # Answer text
-        self.questiontypeforquestions(self.question2_page)
-    # Answer Text Box
-        self.answer = Entry(self.question2_page, bg="#434343", fg='#efefef', border=0, highlightbackground = "#434343", highlightthickness=5,width=5)
-        self.answer.grid(row=2,column=1)
-    # Next button hidden under check button
-        Button(self.question2_page,command= lambda:[self.next_page(self.question2_page),self.question3()], text="Next",fg='#434343',bg="#78c043", border=0, height=1, width=8).grid(row=3,column=2,pady=(50,0))
-    # Check button
-        self.checkbutton = Button(self.question2_page,command=lambda:[self.checkanswer(self.question2_page)], text="Check",fg='#434343',bg="#78c043", border=0, height=1, width=8)
-        self.checkbutton.grid(row=3,column=2,pady=(50,0))
-
-######### PAGE 5 #########
-####### Question 3 #######
-    def question3(self):
-        self.question3_page = Frame(root, bg='#EEEEEE')
-        self.formatting(self.question3_page)
-    # determines type of question to be used in the rest of the 10 questions
-        self.questiontypeforquestions(self.question3_page)
-
-    # Question title
-        Label(self.question3_page,text="Question 3",bg='#efefef',fg='#ff9900',font='CenturyGothic 48 bold').grid(row=1)
-    # Answer text box
-        self.answer = Entry(self.question3_page, bg="#434343", fg='#efefef', border=0, highlightbackground = "#434343", highlightthickness=5,width=5)
-        self.answer.grid(row=2,column=1)
-    # Next button hidden under check button
-        Button(self.question3_page,command= lambda:[self.next_page(self.question3_page),self.question4()], text="Next",fg='#434343',bg="#78c043", border=0, height=1, width=8).grid(row=3,column=2,pady=(50,0))
-    # Check button
-        self.checkbutton = Button(self.question3_page,command=lambda:[self.checkanswer(self.question3_page)], text="Check",fg='#434343',bg="#78c043", border=0, height=1, width=8)
-        self.checkbutton.grid(row=3,column=2,pady=(50,0))
-
-######### PAGE 6 #########
-####### Question 4 #######
-    def question4(self):
-        self.question4_page = Frame(root, bg='#EEEEEE')
-        self.formatting(self.question4_page)
-    # determines type of question to be used in the rest of the 10 questions
-        self.questiontypeforquestions(self.question4_page)
-
-    # Question title
-        Label(self.question4_page,text="Question 4",bg='#efefef',fg='#ff9900',font='CenturyGothic 48 bold').grid(row=1)
-    # Answer text box
-        self.answer = Entry(self.question4_page, bg="#434343", fg='#efefef', border=0, highlightbackground = "#434343", highlightthickness=5,width=5)
-        self.answer.grid(row=2,column=1)
-    # Next button hidden under check button
-        Button(self.question4_page,command= lambda:[self.next_page(self.question4_page),self.question5()], text="Next",fg='#434343',bg="#78c043", border=0, height=1, width=8).grid(row=3,column=2,pady=(50,0))
-    # Check button
-        self.checkbutton = Button(self.question4_page,command=lambda:[self.checkanswer(self.question4_page)], text="Check",fg='#434343',bg="#78c043", border=0, height=1, width=8)
-        self.checkbutton.grid(row=3,column=2,pady=(50,0))
-
-######### PAGE 7 #########
-####### Question 5 #######
-
-    def question5(self):
-        self.question5_page = Frame(root, bg='#EEEEEE')
-        self.formatting(self.question5_page)
-
-    # Question title
-        Label(self.question5_page,text="Question 5",bg='#efefef',fg='#ff9900',font='CenturyGothic 48 bold').grid(row=1)
-    # Answer text
-        self.questiontypeforquestions(self.question5_page)
-    # Answer Text Box
-        self.answer = Entry(self.question5_page, bg="#434343", fg='#efefef', border=0, highlightbackground = "#434343", highlightthickness=5,width=5)
-        self.answer.grid(row=2,column=1)
-    # Next button hidden under check button
-        Button(self.question5_page,command= lambda:[self.next_page(self.question5_page),self.question6()], text="Next",fg='#434343',bg="#78c043", border=0, height=1, width=8).grid(row=3,column=2,pady=(50,0))
-    # Check button
-        self.checkbutton = Button(self.question5_page,command=lambda:[self.checkanswer(self.question5_page)], text="Check",fg='#434343',bg="#78c043", border=0, height=1, width=8)
-        self.checkbutton.grid(row=3,column=2,pady=(50,0))
-
-######### PAGE 8 #########
-####### Question 6 #######
-    def question6(self):
-        self.question6_page = Frame(root, bg='#EEEEEE')
-        self.formatting(self.question6_page)
-    # determines type of question to be used in the rest of the 10 questions
-        self.questiontypeforquestions(self.question6_page)
-
-    # Question title
-        Label(self.question6_page,text="Question 6",bg='#efefef',fg='#ff9900',font='CenturyGothic 48 bold').grid(row=1)
-    # Answer text box
-        self.answer = Entry(self.question6_page, bg="#434343", fg='#efefef', border=0, highlightbackground = "#434343", highlightthickness=5,width=5)
-        self.answer.grid(row=2,column=1)
-    # Next button hidden under check button
-        Button(self.question6_page,command= lambda:[self.next_page(self.question6_page),self.question7()], text="Next",fg='#434343',bg="#78c043", border=0, height=1, width=8).grid(row=3,column=2,pady=(50,0))
-    # Check button
-        self.checkbutton = Button(self.question6_page,command=lambda:[self.checkanswer(self.question6_page)], text="Check",fg='#434343',bg="#78c043", border=0, height=1, width=8)
-        self.checkbutton.grid(row=3,column=2,pady=(50,0))
-        
-######### PAGE 9 #########
-####### Question 7 #######
-
-    def question7(self):
-        self.question7_page = Frame(root, bg='#EEEEEE')
-        self.formatting(self.question7_page)
-
-    # Question title
-        Label(self.question7_page,text="Question 7",bg='#efefef',fg='#ff9900',font='CenturyGothic 48 bold').grid(row=1)
-    # Answer text
-        self.questiontypeforquestions(self.question7_page)
-    # Answer Text Box
-        self.answer = Entry(self.question7_page, bg="#434343", fg='#efefef', border=0, highlightbackground = "#434343", highlightthickness=5,width=5)
-        self.answer.grid(row=2,column=1)
-    # Next button hidden under check button
-        Button(self.question7_page,command= lambda:[self.next_page(self.question7_page),self.question8()], text="Next",fg='#434343',bg="#78c043", border=0, height=1, width=8).grid(row=3,column=2,pady=(50,0))
-    # Check button
-        self.checkbutton = Button(self.question7_page,command=lambda:[self.checkanswer(self.question7_page)], text="Check",fg='#434343',bg="#78c043", border=0, height=1, width=8)
-        self.checkbutton.grid(row=3,column=2,pady=(50,0))
-
-######### PAGE 10 #########
-####### Question 8 #######
-    def question8(self):
-        self.question8_page = Frame(root, bg='#EEEEEE')
-        self.formatting(self.question8_page)
-    # determines type of question to be used in the rest of the 10 questions
-        self.questiontypeforquestions(self.question8_page)
-
-    # Question title
-        Label(self.question8_page,text="Question 8",bg='#efefef',fg='#ff9900',font='CenturyGothic 48 bold').grid(row=1)
-    # Answer text box
-        self.answer = Entry(self.question8_page, bg="#434343", fg='#efefef', border=0, highlightbackground = "#434343", highlightthickness=5,width=5)
-        self.answer.grid(row=2,column=1)
-    # Next button hidden under check button
-        Button(self.question8_page,command= lambda:[self.next_page(self.question8_page),self.question9()], text="Next",fg='#434343',bg="#78c043", border=0, height=1, width=8).grid(row=3,column=2,pady=(50,0))
-    # Check button
-        self.checkbutton = Button(self.question8_page,command=lambda:[self.checkanswer(self.question8_page)], text="Check",fg='#434343',bg="#78c043", border=0, height=1, width=8)
-        self.checkbutton.grid(row=3,column=2,pady=(50,0))
-
-######### PAGE 11 #########
-####### Question 9 #######
-    def question9(self):
-        self.question9_page = Frame(root, bg='#EEEEEE')
-        self.formatting(self.question9_page)
-    # determines type of question to be used in the rest of the 10 questions
-        self.questiontypeforquestions(self.question9_page)
-
-    # Question title
-        Label(self.question9_page,text="Question 9",bg='#efefef',fg='#ff9900',font='CenturyGothic 48 bold').grid(row=1)
-    # Answer text box
-        self.answer = Entry(self.question9_page, bg="#434343", fg='#efefef', border=0, highlightbackground = "#434343", highlightthickness=5,width=5)
-        self.answer.grid(row=2,column=1)
-    # Next button hidden under check button
-        Button(self.question9_page,command= lambda:[self.next_page(self.question9_page),self.question10()], text="Next",fg='#434343',bg="#78c043", border=0, height=1, width=8).grid(row=3,column=2,pady=(50,0))
-    # Check button
-        self.checkbutton = Button(self.question9_page,command=lambda:[self.checkanswer(self.question9_page)], text="Check",fg='#434343',bg="#78c043", border=0, height=1, width=8)
-        self.checkbutton.grid(row=3,column=2,pady=(50,0))
-
-######### PAGE 12 #########
-####### Question 10 #######
-
-    def question10(self):
-        self.question10_page = Frame(root, bg='#EEEEEE')
-        self.formatting(self.question10_page)
-    # Question title
-        Label(self.question10_page,text="Question 10",bg='#efefef',fg='#ff9900',font='CenturyGothic 48 bold').grid(row=1)
-    # Answer text
-        self.questiontypeforquestions(self.question10_page)
-    # Answer Text Box
-        self.answer = Entry(self.question10_page, bg="#434343", fg='#efefef', border=0, highlightbackground = "#434343", highlightthickness=5,width=5)
-        self.answer.grid(row=2,column=1)
-    # Next button hidden under check button
-        Button(self.question10_page,command= lambda:[self.next_page(self.question10_page),self.results()], text="Next",fg='#434343',bg="#78c043", border=0, height=1, width=8).grid(row=3,column=2,pady=(50,0))
-    # Check button
-        self.checkbutton = Button(self.question10_page,command=lambda:[self.checkanswer(self.question10_page)], text="Check",fg='#434343',bg="#78c043", border=0, height=1, width=8)
-        self.checkbutton.grid(row=3,column=2,pady=(50,0))
 
 ######################################################################
-#                                                                    #
-######################################################################
+
+######## PAGE 3-13 ########
+###### Question Pages #####
+
+    def questions(self):
+        self.page = Frame(root, bg='#EEEEEE')
+        self.formatting(self.page)
+    # Question title
+        Label(self.page,text="Question {}".format(self.f),bg='#efefef',fg='#ff9900',font='CenturyGothic 48 bold').grid(row=1)
+    # Answer text box
+        self.answer = Entry(self.page, bg="#434343", fg='#efefef', border=0, highlightbackground = "#434343", highlightthickness=5,width=5)
+        self.answer.grid(row=2,column=1)
+    # Next button hidden under check button
+    # Every time 'Next' is pressed, question function is called until f=10 frames 
+        Button(self.page, text="Next",command=lambda:[self.question_number(),self.next_page(self.page),self.questions()],fg='#434343',bg="#78c043", border=0, height=1, width=8).grid(row=3,column=2,pady=(50,0))
+    # Check button
+        self.checkbutton = Button(self.page,command=lambda:[self.checkanswer(self.page)], text="Check",fg='#434343',bg="#78c043", border=0, height=1, width=8)
+        self.checkbutton.grid(row=3,column=2,pady=(50,0))
+    # determines type of question to be used in the rest of the 10 questions
+        self.questiontypeforquestions(self.page)
+        if self.f == 11:
+            self.next_page(self.page)
+            self.results()
+
+# Function for adding to f after 'next' button is pressed
+    def question_number(self):
+        self.f=self.f+1
 
 # removes 'check' button to reveal the 'next' button that takes to the next page
     def remove_check(self):
@@ -361,7 +194,6 @@ class Interface:
             self.n2 = random.randint(5,20)
         self.a = int(self.n + self.n2)
         Label(page,text="{} + {} =".format(self.n,self.n2),fg='#434343').grid(row=2,column=0)
-
     def multiplication(self,page):
         if self.difficulty == 'Easy':
             self.n = random.randint(0,5)
@@ -374,7 +206,6 @@ class Interface:
             self.n2 = random.randint(0,12)
         self.a = int(self.n * self.n2)
         Label(page,text="{} x {} =".format(self.n,self.n2),fg='#434343').grid(row=2,column=0)
-
     def division(self,page):
         if self.difficulty == 'Easy':
             self.n = random.randint(1,5)
@@ -387,7 +218,6 @@ class Interface:
             self.n2 = self.n*(random.randint(1,12))
         self.a = int(self.n2/self.n)
         Label(page,text="{} ÷ {} =".format(self.n2,self.n),fg='#434343').grid(row=2,column=0)
-
     def subtraction(self,page):
             if self.difficulty == 'Easy':
                 self.n2 = random.randint(1,5)
@@ -424,8 +254,12 @@ class Interface:
             print(self.student.incorrect_answers)
             self.remove_check()
 
+
+######################################################################
+
 ######### PAGE 13 #########
 ####### Results Page ######
+
     def results(self):
         self.results_page = Frame(root, bg='#EEEEEE')
         self.formatting(self.results_page)
@@ -442,11 +276,11 @@ class Interface:
         elif self.score < 5:
             Label(self.results_page,text="Practice makes perfect {},\nyou got {}/10 answers correct".format(self.student.student_name,self.score),bg='#efefef',fg='#434343').grid(row=2)
     # restart/logout buttons
-        Button(self.results_page, text="Restart",command= lambda:[self.restart_var(),self.next_page(self.results_page),self.selection()],fg='#434343',bg="#78c043", border=0, height=1, width=8).grid(row=3,sticky=E)
-        Button(self.results_page, text="Log out",command= lambda:[self.restart_var(),self.restart_user(),self.next_page(self.results_page),self.__init__()],fg='#434343',bg="#ff9900", border=0, height=1, width=8).grid(row=3,sticky=W)
+        Button(self.results_page, text="Restart",command= lambda:[self.reset_var(),self.next_page(self.results_page),self.selection()],fg='#434343',bg="#78c043", border=0, height=1, width=8).grid(row=3,sticky=E)
+        Button(self.results_page, text="Log out",command= lambda:[self.reset_var(),self.reset_user(),self.next_page(self.results_page),self.__init__()],fg='#434343',bg="#ff9900", border=0, height=1, width=8).grid(row=3,sticky=W)
 
-# restarting all variables for the next user
-    def restart_var(self):
+# Resetting all variables for restart
+    def reset_var(self):
         self.student.scores = []
         self.student.selected_questiontype = []
         self.student.selected_difficulty = []
@@ -455,12 +289,15 @@ class Interface:
         self.student.incorrect_answers = []
         self.student.correct_answers = []
         self.score = None
-    def restart_user(self):
+# Resetting user for logging out
+    def reset_user(self):
         self.student.student_name = None
 
     #def store(self):
     #    studentfile=open('student_file.txt','a')
     #    studentfile.write('\nstudent name: {}\n')
+
+######################################################################
 
 Interface()
 root.mainloop() 
