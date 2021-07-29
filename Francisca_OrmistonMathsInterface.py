@@ -124,45 +124,93 @@ class Interface:
         else:
             self.next_page(cpage)
 
-####### PAGE 3 #######
+######### PAGE 3 #########
+####### Question 1 #######
     def question1(self):
         self.question1_page = Frame(root, bg='#EEEEEE')
         self.formatting(self.question1_page)
-        self.qnum = 1
 
-        #self.qtypes = ['Addition +','Subtraction -','Times x','Division ÷']
-        #self.difficulties = ['Easy','Intermediate','Hard']
-
+    # turning questiontype and difficulty into string
         self.questiontype = str(self.student.selected_questiontype[0])
         self.difficulty = str(self.student.selected_difficulty[0])
-
         print(self.questiontype,'\n',self.difficulty)
 
     # Question title
-        Label(self.question1_page,text="Question {}".format(self.qnum),bg='#efefef',fg='#ff9900',font='CenturyGothic 48 bold').grid(row=1)
+        Label(self.question1_page,text="Question 1",bg='#efefef',fg='#ff9900',font='CenturyGothic 48 bold').grid(row=1)
+
+    # Text Box
+        self.answer = Entry(self.question1_page, bg="#434343", fg='#efefef', border=0, highlightbackground = "#434343", highlightthickness=5,width=5)
+        self.answer.grid(row=2,column=1)
 
     # Question label
-        if self.questiontype=='Addition +' and self.difficulty=='Easy':
-            self.easy()
+        if self.questiontype=='Addition +':
             self.addition()
-            Label(self.question1_page,text="{} + {} =".format(self.n,self.n2),fg='#434343').grid(row=2,column=0)
-            self.answer = Entry(self.question1_page, bg="#434343", fg='#efefef', border=0, highlightbackground = "#434343", highlightthickness=5,width=5)
-            self.answer.grid(row=2,column=1)
-            print(self.a)
+        elif self.questiontype=='Times x':
+            self.multiplication()
+        elif self.questiontype=='Division ÷':
+            self.division()
+        elif self.questiontype=='Subtraction -':
+            self.subtraction()
 
     # Next button hidden under check button
-        Button(self.question1_page, text="Next",fg='#434343',bg="#78c043", border=0, height=1, width=8).grid(row=3,column=2,pady=(50,0))
+        Button(self.question1_page,command= lambda:[self.next_page(self.question1_page),self.question2()], text="Next",fg='#434343',bg="#78c043", border=0, height=1, width=8).grid(row=3,column=2,pady=(50,0))
     # Check button
         self.checkbutton = Button(self.question1_page,command=lambda:[self.checkanswer()], text="Check",fg='#434343',bg="#78c043", border=0, height=1, width=8)
         self.checkbutton.grid(row=3,column=2,pady=(50,0))
 
-# difficulties and question types
+# question types
     def addition(self):
+        if self.difficulty == 'Easy':
+            self.n = random.randint(0,5)
+            self.n2 = random.randint(0,5)
+        elif self.difficulty == 'Intermediate':
+            self.n = random.randint(5,10)
+            self.n2 = random.randint(5,10)
+        elif self.difficulty == 'Hard':
+            self.n = random.randint(5,20)
+            self.n2 = random.randint(5,20)
         self.a = int(self.n + self.n2)
+        Label(self.question1_page,text="{} + {} =".format(self.n,self.n2),fg='#434343').grid(row=2,column=0)
 
-    def easy(self):
-        self.n = random.randint(1,5)
-        self.n2 = random.randint(1,5)
+    def multiplication(self):
+        if self.difficulty == 'Easy':
+            self.n = random.randint(0,5)
+            self.n2 = random.randint(0,5)
+        elif self.difficulty == 'Intermediate':
+            self.n = random.randint(0,10)
+            self.n2 = random.randint(0,5)
+        elif self.difficulty == 'Hard':
+            self.n = random.randint(0,12)
+            self.n2 = random.randint(0,12)
+        self.a = int(self.n * self.n2)
+        Label(self.question1_page,text="{} x {} =".format(self.n,self.n2),fg='#434343').grid(row=2,column=0)
+
+    def division(self):
+        if self.difficulty == 'Easy':
+            self.n = random.randint(1,5)
+            self.n2 = self.n*(random.randint(1,5)) 
+        elif self.difficulty == 'Intermediate':
+            self.n = random.randint(1,5)
+            self.n2 = self.n*(random.randint(1,10))
+        elif self.difficulty == 'Hard':
+            self.n = random.randint(1,12)
+            self.n2 = random.randint(1,12)
+        self.a = int(self.n / self.n2)
+        Label(self.question1_page,text="{} ÷ {} =".format(self.n,self.n2),fg='#434343').grid(row=2,column=0)
+
+    def subtraction(self):
+            if self.difficulty == 'Easy':
+                self.n2 = random.randint(1,5)
+                self.n = random.randint(self.n2,10)
+            elif self.difficulty == 'Intermediate':
+                self.n2 = random.randint(1,10)
+                self.n = random.randint(self.n2,10)
+            elif self.difficulty == 'Hard':
+                self.n2 = random.randint(1,20)
+                self.n = random.randint(self.n2,20)
+            self.a = int(self.n - self.n2)
+            Label(self.question1_page,text="{} - {} =".format(self.n,self.n2),fg='#434343').grid(row=2,column=0)
+
 
 # check whether answer was correct, incorrect, or invalid
     def checkanswer(self):
@@ -175,16 +223,31 @@ class Interface:
                 print('Please enter a number')
         if int(self.ans) == self.a:
             print('correct!')
-            Label(self.question1_page,text="Correct!",fg='#434343').grid(row=3,column=0)
+            Label(self.question1_page,text="Correct!",fg='#78c043').grid(row=3,column=0)
             self.remove_check()
         if int(self.ans) != self.a:
             print('incorrect, the answer is',self.a)
-            Label(self.question1_page,text="Incorrect, the answer is {}".format(self.a),fg='#434343').grid(row=3,column=0)
+            Label(self.question1_page,text="Incorrect, the answer is {}".format(self.a),fg='#ff5252').grid(row=3,column=0)
             self.remove_check()
             
 # removes 'check' button to reveal the 'next' button that takes to the next page
     def remove_check(self):
         self.checkbutton.grid_remove()
+
+######### PAGE 4 #########
+####### Question 2 #######
+
+    def question2(self):
+        self.question2_page = Frame(root, bg='#EEEEEE')
+        self.formatting(self.question2_page)
+
+    # Question title
+        Label(self.question2_page,text="Question 2",bg='#efefef',fg='#ff9900',font='CenturyGothic 48 bold').grid(row=1)
+
+    # Text Box
+        self.answer = Entry(self.question2_page, bg="#434343", fg='#efefef', border=0, highlightbackground = "#434343", highlightthickness=5,width=5)
+        self.answer.grid(row=2,column=1)
+
 
 
 Interface()
