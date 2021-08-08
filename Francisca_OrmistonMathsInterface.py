@@ -1,14 +1,16 @@
 # CSC3 2021
 # Ormiston Computing Interface Class
 # Francisca Nel
-# Ver 9
+# Ver 12
 
-import random # for generating random numbers for the math questions
+from Francisca_Math_operations_class import Mathop
 from Francisca_OrmistonMathsStudent import Student 
 from tkinter import *
 
 root = Tk()
 root.configure(bg='#EEEEEE')
+root.grid_columnconfigure(0, weight=1)
+root.grid_rowconfigure(0, weight=1)
 root.title("Ormiston Maths")
 root.geometry("880x495") # small 16:9 ratio window (55x)
 
@@ -20,13 +22,10 @@ class Interface:
 ######### PAGE 1 ########
 ####### Name Page #######
 
-        root.grid_columnconfigure(0, weight=1)
-        root.grid_rowconfigure(0, weight=1)
-
         self.name_page = Frame(root, bg='#EEEEEE')
         self.formatting(self.name_page)
        
-    # OSC logo displayed using PhotoImage.
+    # Ormiston Primary School logo displayed using PhotoImage.
         self.img = PhotoImage(file="OPS_logo3.gif")
         self.logotitle = Label(self.name_page, image=self.img, bg='#EEEEEE')
         self.logotitle.photo = self.img
@@ -87,7 +86,7 @@ class Interface:
         Label(self.selection_page,fg='#434343',text='Difficulties').grid(row=2,column=2,pady=(50,0))
         self.selectionfunc(self.student.difficulties,self.diffbuttons,self.student.selected_difficulty,3,self.student.selected_difficulties)
     # next button
-        Button(self.selection_page,command=lambda:[self.check_qbutton_selected(self.selection_page),self.turnstr(),self.questions()], text="Next",fg='#434343',bg="#78c043", border=0, height=1, width=8).grid(row=4,column=4,pady=(50,0))
+        Button(self.selection_page,command=lambda:[self.check_qbutton_selected(self.selection_page),self.questions()], text="Next",fg='#434343',bg="#78c043", border=0, height=1, width=8).grid(row=4,column=4,pady=(50,0))
 
 # Function for selection of buttons to be used with question types and difficulties
     def selectionfunc(self,to_select,buttonlist,selection,row,classlist):
@@ -135,23 +134,28 @@ class Interface:
         else:
             self.next_page(cpage)
 
-# determines type of question to be used in the 10 questions
     def questiontypeforquestions(self,page):
         self.questiontypeforq = StringVar
-        if self.questiontype=='Addition +':
-            self.questiontypeforq = self.addition(page)
-        elif self.questiontype=='Times x':
-            self.questiontypeforq = self.multiplication(page)
-        elif self.questiontype=='Division ÷':
-            self.questiontypeforq = self.division(page)
-        elif self.questiontype=='Subtraction -':
-            self.questiontypeforq = self.subtraction(page)
-
-    def turnstr(self):
-    # turning questiontype and difficulty into string
         self.questiontype = str(self.student.selected_questiontype[0])
         self.difficulty = str(self.student.selected_difficulty[0])
+    # Variables for the mathop class 
+        qt = self.questiontypeforq
+        d = self.difficulty
+        self.maths = Mathop(qt,d)
         print(self.questiontype,'\n',self.difficulty)
+    # determines type of question to be used from selection
+        if self.questiontype=='Addition +':
+            self.questiontypeforq = self.maths.addition()
+            Label(page,text="{} + {} =".format(self.maths.n,self.maths.n2),fg='#434343').grid(row=2,column=0)
+        elif self.questiontype=='Times x':
+            self.questiontypeforq = self.maths.multiplication()
+            Label(page,text="{} x {} =".format(self.maths.n,self.maths.n2),fg='#434343').grid(row=2,column=0)
+        elif self.questiontype=='Division ÷':
+            self.questiontypeforq = self.maths.division()
+            Label(page,text="{} ÷ {} =".format(self.maths.n2,self.maths.n),fg='#434343').grid(row=2,column=0)
+        elif self.questiontype=='Subtraction -':
+            self.questiontypeforq = self.maths.subtraction()
+            Label(page,text="{} - {} =".format(self.maths.n,self.maths.n2),fg='#434343').grid(row=2,column=0)
 
 ######################################################################
 
@@ -185,56 +189,6 @@ class Interface:
 # removes 'check' button to reveal the 'next' button that takes to the next page
     def remove_check(self):
         self.checkbutton.grid_remove()
-
-# question types
-    def addition(self,page):
-        if self.difficulty == 'Easy':
-            self.n = random.randint(0,5)
-            self.n2 = random.randint(0,5)
-        elif self.difficulty == 'Intermediate':
-            self.n = random.randint(5,10)
-            self.n2 = random.randint(5,10)
-        elif self.difficulty == 'Hard':
-            self.n = random.randint(5,20)
-            self.n2 = random.randint(5,20)
-        self.a = int(self.n + self.n2)
-        Label(page,text="{} + {} =".format(self.n,self.n2),fg='#434343').grid(row=2,column=0)
-    def multiplication(self,page):
-        if self.difficulty == 'Easy':
-            self.n = random.randint(0,5)
-            self.n2 = random.randint(0,5)
-        elif self.difficulty == 'Intermediate':
-            self.n = random.randint(0,10)
-            self.n2 = random.randint(0,5)
-        elif self.difficulty == 'Hard':
-            self.n = random.randint(0,12)
-            self.n2 = random.randint(0,12)
-        self.a = int(self.n * self.n2)
-        Label(page,text="{} x {} =".format(self.n,self.n2),fg='#434343').grid(row=2,column=0)
-    def division(self,page):
-        if self.difficulty == 'Easy':
-            self.n = random.randint(1,5)
-            self.n2 = self.n*(random.randint(1,5)) 
-        elif self.difficulty == 'Intermediate':
-            self.n = random.randint(1,5)
-            self.n2 = self.n*(random.randint(1,10))
-        elif self.difficulty == 'Hard':
-            self.n = random.randint(1,12)
-            self.n2 = self.n*(random.randint(1,12))
-        self.a = int(self.n2/self.n)
-        Label(page,text="{} ÷ {} =".format(self.n2,self.n),fg='#434343').grid(row=2,column=0)
-    def subtraction(self,page):
-            if self.difficulty == 'Easy':
-                self.n2 = random.randint(1,5)
-                self.n = random.randint(self.n2,10)
-            elif self.difficulty == 'Intermediate':
-                self.n2 = random.randint(1,10)
-                self.n = random.randint(self.n2,10)
-            elif self.difficulty == 'Hard':
-                self.n2 = random.randint(1,20)
-                self.n = random.randint(self.n2,20)
-            self.a = int(self.n - self.n2)
-            Label(page,text="{} - {} =".format(self.n,self.n2),fg='#434343').grid(row=2,column=0)
             
 # check whether answer was correct, incorrect, or invalid
     def checkanswer(self,page):
@@ -245,18 +199,16 @@ class Interface:
                 break
             except ValueError:
                 print('Please enter a number')
-        if int(self.ans) == self.a:
+        if int(self.ans) == self.maths.a:
             print('correct!')
             Label(page,text="Correct!",fg='#78c043').grid(row=3,column=0)
             self.student.correct_answers.append(self.ans)
             print(self.student.correct_answers)
             self.remove_check()
 
-        if int(self.ans) != self.a:
-            print('incorrect, the answer is',self.a)
-            Label(page,text="Incorrect, the answer is {}".format(self.a),fg='#ff5252').grid(row=3,column=0)
-            self.student.incorrect_answers.append(self.ans)
-            print(self.student.incorrect_answers)
+        if int(self.ans) != self.maths.a:
+            print('incorrect, the answer is',self.maths.a)
+            Label(page,text="Incorrect, the answer is {}".format(self.maths.a),fg='#ff5252').grid(row=3,column=0)
             self.remove_check()
 
 
@@ -281,27 +233,24 @@ class Interface:
         elif self.score < 5:
             Label(self.results_page,text="Practice makes perfect {},\nyou got {}/10 answers correct".format(self.student.student_name,self.score),bg='#efefef',fg='#434343').grid(row=2)
     # restart/logout buttons
-        Button(self.results_page, text="Restart",command= lambda:[self.reset_var(),self.next_page(self.results_page),self.selection()],fg='#434343',bg="#78c043", border=0, height=1, width=8).grid(row=3,sticky=E)
-        Button(self.results_page, text="Log out",command= lambda:[self.reset_var(),self.reset_user(),self.next_page(self.results_page),self.__init__()],fg='#434343',bg="#ff9900", border=0, height=1, width=8).grid(row=3,sticky=W)
+        Button(self.results_page, text="Restart",command= lambda:[self.store(),self.reset_var(),self.next_page(self.results_page),self.selection()],fg='#434343',bg="#78c043", border=0, height=1, width=8).grid(row=3,sticky=E)
+        Button(self.results_page, text="Log out",command= lambda:[self.store(),self.reset_var(),self.reset_user(),self.next_page(self.results_page),self.__init__()],fg='#434343',bg="#ff9900", border=0, height=1, width=8).grid(row=3,sticky=W)
 
 # Resetting all variables for restart
     def reset_var(self):
         self.student.scores = []
         self.student.selected_questiontype = []
         self.student.selected_difficulty = []
-        self.student.selected_questiontypes = []
-        self.student.selected_difficulties = []
-        self.student.incorrect_answers = []
         self.student.correct_answers = []
         self.score = None
-# Resetting user for logging out
+# Resetting user name for logging out
     def reset_user(self):
         self.student.student_name = None
 
-    #def store(self):
-    #    studentfile=open('student_file.txt','a')
-    #    studentfile.write('\nstudent name: {}\n')
-
+# Function for storing info to file
+    def store(self):
+        pass
+                          
 ######################################################################
 
 Interface()
