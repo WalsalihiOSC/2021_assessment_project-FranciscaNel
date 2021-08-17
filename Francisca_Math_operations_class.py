@@ -13,49 +13,49 @@ class Mathop:
 
     def addition(self):
         if self.difficulty == 'Easy':
-            self.n = random.randint(0,5)
-            self.n2 = random.randint(0,5)
+            self.n = random.randint(1,3)
+            self.n2 = random.randint(0,3)
         elif self.difficulty == 'Intermediate':
-            self.n = random.randint(5,10)
-            self.n2 = random.randint(5,10)
+            self.n = random.randint(0,10)
+            self.n2 = random.randint(1,5)
         elif self.difficulty == 'Hard':
-            self.n = random.randint(5,20)
-            self.n2 = random.randint(5,20)
+            self.n = random.randint(5,15)
+            self.n2 = random.randint(1,15)
         self.a = int(self.n + self.n2)
 
     def multiplication(self):
         if self.difficulty == 'Easy':
             self.n = random.randint(0,5)
-            self.n2 = random.randint(0,5)
+            self.n2 = random.randint(1,2)
         elif self.difficulty == 'Intermediate':
-            self.n = random.randint(0,10)
-            self.n2 = random.randint(0,5)
+            self.n = random.randint(0,5)
+            self.n2 = random.randint(1,5)
         elif self.difficulty == 'Hard':
             self.n = random.randint(0,12)
-            self.n2 = random.randint(0,12)
+            self.n2 = random.randint(1,12)
         self.a = int(self.n * self.n2)
 
     def division(self):
         if self.difficulty == 'Easy':
-            self.n = random.randint(1,5)
-            self.n2 = self.n*(random.randint(1,5)) 
+            self.n = random.randint(1,3)
+            self.n2 = self.n*(random.randint(1,3)) 
         elif self.difficulty == 'Intermediate':
             self.n = random.randint(1,5)
-            self.n2 = self.n*(random.randint(1,10))
+            self.n2 = self.n*(random.randint(1,5))
         elif self.difficulty == 'Hard':
-            self.n = random.randint(1,12)
-            self.n2 = self.n*(random.randint(1,12))
+            self.n = random.randint(1,5)
+            self.n2 = self.n*(random.randint(1,10))
         self.a = int(self.n2/self.n)
     
     def subtraction(self):
             if self.difficulty == 'Easy':
                 self.n2 = random.randint(1,5)
-                self.n = random.randint(self.n2,10)
+                self.n = random.randint(self.n2,5)
             elif self.difficulty == 'Intermediate':
-                self.n2 = random.randint(1,10)
+                self.n2 = random.randint(1,5)
                 self.n = random.randint(self.n2,10)
             elif self.difficulty == 'Hard':
-                self.n2 = random.randint(1,20)
-                self.n = random.randint(self.n2,20)
+                self.n2 = random.randint(1,10)
+                self.n = random.randint(self.n2,15)
             self.a = int(self.n - self.n2)
         
