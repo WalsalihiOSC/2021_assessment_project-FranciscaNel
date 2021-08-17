@@ -1,7 +1,7 @@
 # CSC3 2021
 # Ormiston Computing Student Class
 # Francisca Nel
-# Ver 1
+# Ver 6
 
 class Student:
     def __init__(self,sn):
@@ -14,9 +14,16 @@ class Student:
         self.selected_questiontypes = [] 
         self.selected_difficulties = []
     # Lists to store incorrect answers and correct answers for the scores
-        self.incorrect_answers = []
         self.correct_answers = []
-        self.scores = []
+        self.score = 0
     # Lists for question types and difficulties
         self.qtypes = ['Addition +','Times x','Division ÷','Subtraction -']
         self.difficulties = ['Easy','Intermediate','Hard']
+
+# Function for storing info to file
+    def store(self):
+        studentfile=open("student_file.txt","a")
+        studentfile.write("\n\nStudent Name: {}\nQuestion Type: {}\nDifficulty: {}\nScore: {}/10"
+                         .format(self.student_name, self.selected_questiontype,
+                                 self.selected_difficulty, self.score))
+        studentfile.close()
