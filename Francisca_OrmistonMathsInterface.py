@@ -219,7 +219,7 @@ class Interface:
                 Label(self.page,text='✘',fg='#ff5252',font='CenturyGothic 50 bold').grid(row=2,column=1)
                 self.remove_check()
 
-######################################################################✔✘
+###################################################################### 
 
 ######### PAGE 13 #########
 ####### Results Page ######
@@ -238,8 +238,43 @@ class Interface:
         elif self.student.score < 5:
             Label(self.results_page,text="Practice makes perfect {},\nyou got {}/10 answers correct".format(self.student.student_name,self.student.score),fg='#434343').grid(row=2)
     # restart/logout buttons
-        Button(self.results_page, text="Restart",command= lambda:[self.student.store(),self.reset_var(),self.next_page(self.results_page),self.selection()],fg='#434343',bg="#78c043", border=0, height=1, width=8).grid(row=3,sticky=E)
-        Button(self.results_page, text="Log out",command= lambda:[self.student.store(),self.reset_var(),self.reset_user(),self.next_page(self.results_page),self.__init__()],fg='#434343',bg="#ff9900", border=0, height=1, width=8).grid(row=3,sticky=W)
+        Button(self.results_page, text="Next",command= lambda:[self.student.store(),self.reset_var(),self.next_page(self.results_page),self.leaderboard()],fg='#434343',bg="#78c043", border=0, height=1, width=8).grid(row=3,sticky=E)
+
+######################################################################
+######################################################################
+
+######### PAGE 13 #########
+####### Results Page ######
+
+    def leaderboard(self):
+        self.leaderboard_page = Frame(root, bg='#EEEEEE')
+        self.formatting(self.leaderboard_page)
+        self.leaderboard_page.grid_configure(padx=(0))
+    # Title
+        Label(self.leaderboard_page,text="Leaderboard",fg='#ff9900',font='CenturyGothic 48 bold').grid(row=0,column=1)
+    # Labels
+        #Label(self.leaderboard_page,text="Name",fg='#434343').grid(row=2,pady=(20),padx=(0,400))
+  
+        self.lst = ["placeholder","placeholder",
+                    ("Place", "Name", "Score"),
+                    ("1st", "User a", "10/10"),
+                    ("2nd", "User b", "10/10"),
+                    ("3rd", "User c", "9/10"),
+                    ("4th", "User d", "7/10"),
+                    ("5th", "User e", "5/10")]
+
+        for r in range(2,8): # iteration for rows (6)
+            for c in range(3): # iteration for columns(3) 
+                self.e = Entry(self.leaderboard_page, width=10, fg='#434343')
+                self.e.grid(row=r, column=c, pady=2)
+                self.e.insert(END, self.lst[r][c])
+
+    # restart/logout buttons
+        self.restartb = Button(self.leaderboard_page, text="Restart",command= lambda:[self.student.store(),self.reset_var(),self.next_page(self.leaderboard_page),self.selection()],fg='#434343',bg="#78c043", border=0, height=1, width=8)
+        self.restartb.grid(row=8,column=0,sticky=E,pady=(20,0))
+        
+        self.logoutb = Button(self.leaderboard_page, text="Log out",command= lambda:[self.student.store(),self.reset_var(),self.reset_user(),self.next_page(self.leaderboard_page),self.__init__()],fg='#434343',bg="#ff9900", border=0, height=1, width=8)
+        self.logoutb.grid(row=8,column=2,sticky=W,pady=(20,0))
 
 # Resetting all variables for restart
     def reset_var(self):
@@ -253,16 +288,5 @@ class Interface:
 
 
 
-######################################################################
-######################################################################
-
-######### PAGE 13 #########
-####### Results Page ######
-
-    #def leaderboard(self):
-    #    self.leaderboard_page = Frame(root, bg='#EEEEEE')
-    #    self.formatting(self.leaderboard_page)
-    #    self.results_page.grid_configure(padx=(0))
-    
 Interface()
 root.mainloop() 
