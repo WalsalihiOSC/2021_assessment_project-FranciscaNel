@@ -1,7 +1,7 @@
 # CSC3 2021
 # Ormiston Computing Interface Class
 # Francisca Nel
-# Ver 12
+# Ver 14
 
 from Francisca_Math_operations_class import Mathop
 from Francisca_OrmistonMathsStudent import Student 
@@ -132,6 +132,7 @@ class Interface:
         else:
             self.next_page(cpage)
 
+# Turn question type and difficulty selections from list to str
     def turnstr(self):
         self.questiontypeforq = StringVar
         self.questiontype = str(self.student.selected_questiontype[0])
@@ -143,6 +144,7 @@ class Interface:
         d = self.difficulty
         self.maths = Mathop(qt,d)
         print(self.questiontype,'\n',self.difficulty)
+
     # determines type of question to be used from selection
         if self.questiontype=='Addition +':
             self.questiontypeforq = self.maths.addition()
@@ -156,6 +158,10 @@ class Interface:
         elif self.questiontype=='Subtraction -':
             self.questiontypeforq = self.maths.subtraction()
             Label(page,text="{} - {} =".format(self.maths.n,self.maths.n2),font='CenturyGothic 40 bold',fg='#434343').grid(row=2,column=0,padx=(0,180))
+
+    # I need to simplify the code above into a simple function!!!
+    def question_used(self):
+        pass
 
 ######################################################################
 
@@ -238,13 +244,13 @@ class Interface:
         elif self.student.score < 5:
             Label(self.results_page,text="Practice makes perfect {},\nyou got {}/10 answers correct".format(self.student.student_name,self.student.score),fg='#434343').grid(row=2)
     # restart/logout buttons
-        Button(self.results_page, text="Next",command= lambda:[self.student.store(),self.reset_var(),self.next_page(self.results_page),self.leaderboard()],fg='#434343',bg="#78c043", border=0, height=1, width=8).grid(row=3,sticky=E)
+        Button(self.results_page, text="Next",command= lambda:[self.student.store(),self.next_page(self.results_page),self.leaderboard()],fg='#434343',bg="#78c043", border=0, height=1, width=8).grid(row=3,sticky=E)
 
 ######################################################################
 ######################################################################
 
-######### PAGE 13 #########
-####### Results Page ######
+######### PAGE 14 #########
+####### Leaderboard Page ######
 
     def leaderboard(self):
         self.leaderboard_page = Frame(root, bg='#EEEEEE')
@@ -252,9 +258,8 @@ class Interface:
         self.leaderboard_page.grid_configure(padx=(0))
     # Title
         Label(self.leaderboard_page,text="Leaderboard",fg='#ff9900',font='CenturyGothic 48 bold').grid(row=0,column=1)
-    # Labels
-        #Label(self.leaderboard_page,text="Name",fg='#434343').grid(row=2,pady=(20),padx=(0,400))
   
+    # Placeholder data for the leaderboard
         self.lst = ["placeholder","placeholder",
                     ("Place", "Name", "Score"),
                     ("1st", "User a", "10/10"),
@@ -270,10 +275,10 @@ class Interface:
                 self.e.insert(END, self.lst[r][c])
 
     # restart/logout buttons
-        self.restartb = Button(self.leaderboard_page, text="Restart",command= lambda:[self.student.store(),self.reset_var(),self.next_page(self.leaderboard_page),self.selection()],fg='#434343',bg="#78c043", border=0, height=1, width=8)
+        self.restartb = Button(self.leaderboard_page, text="Restart",command= lambda:[self.reset_var(),self.next_page(self.leaderboard_page),self.selection()],fg='#434343',bg="#78c043", border=0, height=1, width=8)
         self.restartb.grid(row=8,column=0,sticky=E,pady=(20,0))
         
-        self.logoutb = Button(self.leaderboard_page, text="Log out",command= lambda:[self.student.store(),self.reset_var(),self.reset_user(),self.next_page(self.leaderboard_page),self.__init__()],fg='#434343',bg="#ff9900", border=0, height=1, width=8)
+        self.logoutb = Button(self.leaderboard_page, text="Log out",command= lambda:[self.reset_var(),self.reset_user(),self.next_page(self.leaderboard_page),self.__init__()],fg='#434343',bg="#ff9900", border=0, height=1, width=8)
         self.logoutb.grid(row=8,column=2,sticky=W,pady=(20,0))
 
 # Resetting all variables for restart
@@ -285,8 +290,6 @@ class Interface:
 # Resetting user name for logging out
     def reset_user(self):
         self.student.student_name = None
-
-
 
 Interface()
 root.mainloop() 
