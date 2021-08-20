@@ -1,29 +1,30 @@
 # CSC3 2021
 # Ormiston Computing Student Class
 # Francisca Nel
-# Ver 7
+# Ver 9
 
 class Student:
     def __init__(self,sn):
-    # defining (possible) variables for the student instance
         self.student_name = sn
-    # Lists for storing questiontype/difficulty temporarily to check if selection < 1
+    # storing questiontype/difficulty  
         self.selected_questiontype = [] 
         self.selected_difficulty = []
-    # Lists to store incorrect answers and correct answers for the scores
+    # store incorrect answers and correct answers for the scores
         self.correct_answers = []
         self.score = 0
-    # Lists for question types and difficulties
+    # question types and difficulties
         self.qtypes = ['Addition','Times','Division','Subtraction']
         self.difficulties = ['Easy','Intermediate','Hard']
 
-                        # Addition
+        self.high_scores = []
+
+                    # Addition
         self.file_paths = ["Text_Files\Addition_easy.txt", "Text_Files\Addition_intermediate.txt", "Text_Files\Addition_hard.txt", 
-                        # Subtraction
+                    # Subtraction
                            "Text_Files\Subtraction_easy.txt", "Text_Files\Subtraction_intermediate.txt", "Text_Files\Subtraction_hard.txt",
-                        # Multiplication
+                    # Multiplication
                            "Text_Files\Times_easy.txt", "Text_Files\Times_intermediate.txt", "Text_Files\Times_hard.txt",
-                        # Division
+                    # Division
                            "Text_Files\Division_easy.txt", "Text_Files\Division_intermediate.txt", "Text_Files\Division_hard.txt"]
 
 # Functions for storing info to file (I should be able to simplify these later)
@@ -34,7 +35,6 @@ class Student:
                 self.writef(1)
             elif self.selected_difficulty[0] == 'Hard':
                 self.writef(2)
-
     def store_subtraction(self):
             if self.selected_difficulty[0] == 'Easy':
                 self.writef(3)
@@ -42,7 +42,6 @@ class Student:
                 self.writef(4)
             elif self.selected_difficulty[0] == 'Hard':
                 self.writef(5)
-            
     def store_multiplication(self):
             if self.selected_difficulty[0] == 'Easy':
                 self.writef(6)
@@ -50,7 +49,6 @@ class Student:
                 self.writef(7)
             elif self.selected_difficulty[0] == 'Hard':
                 self.writef(8)
-
     def store_division(self):
             if self.selected_difficulty[0] == 'Easy':
                 self.writef(9)
@@ -62,13 +60,24 @@ class Student:
 # Function that writes to file and produces list to be used for displaying high scores
     def writef(self,i):
         with open(self.file_paths[i],"a") as f:
-            f.write("\n{} {}/10".format(self.student_name, self.score))
+            f.write("{} {}\n".format(self.student_name, self.score))
             f.close()
         with open(self.file_paths[i],"r") as f:
             c = f.readlines() 
         # splits the list into a tuple for the leaderboard
             content = [tuple(line.strip().split()) for line in c] 
+        # Sort the text file converted to list into 5 highest scores
+            content.sort(key=lambda x : int(x[1])) # sorts from index 1 of tuple
+            content.reverse()
             print(content)
+        # prevent index error by filling in empty tuples until 5 elements in list
+            if len(content) > 5:
+                self.high_scores = content[0:5]
+            else:
+                self.high_scores = content
+                while len(self.high_scores) < 5:
+                    self.high_scores.append(('',''))       
+                print(self.high_scores)
 
     def store(self):
         if self.selected_questiontype[0] == 'Addition': self.store_addition()
