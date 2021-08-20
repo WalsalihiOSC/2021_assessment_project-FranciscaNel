@@ -1,7 +1,7 @@
 # CSC3 2021
 # Ormiston Computing Interface Class
 # Francisca Nel
-# Ver 15
+# Ver 16
 
 from Francisca_Math_operations_class import Mathop
 from Francisca_OrmistonMathsStudent import Student 
@@ -26,8 +26,8 @@ class Interface:
 
     ### COLOURS ### 
 # I am not using tkinter's colours because I am using custom colours
-       #self.color = [  0:darkgrey, 1:lightgrey, 2:green, 3:red, 4:orange  ]
-        self.color = ['#434343', '#EDEDED', '#78c043', '#ff5252', '#ff9900']
+       #self.color = [ 0:darkgrey, 1:lightgrey, 2:green, 3:red, 4:orange, 5:darkgreen ]
+        self.color = ['#434343', '#EDEDED', '#78c043', '#ff5252', '#ff9900', '#64a335']
 
 ######################################### PAGE 1 #########################################
 ####################################### Name Page ########################################
@@ -125,12 +125,12 @@ class Interface:
         b = buttonlist[sel]
         selq = to_select[sel]
     # If the button is clicked while green, the selection is removed from the list
-        if b.cget('bg') == "#64a335" :
-            b.config(bg=self.color[4], fg=self.color[0])
+        if b.cget('bg') == self.color[5] :
+            b.config(bg= self.color[4], fg=self.color[0])
             selection.remove(selq) 
     # If the button is clicked while orange, it is turned green and added to the list
         elif len(selection) < 1:
-            b.config(bg="#64a335", fg=self.color[1])
+            b.config(bg= self.color[5], fg=self.color[1])
             selection.append(selq)
         print("selection:", selection)
 
@@ -262,7 +262,7 @@ class Interface:
         elif self.student.score < 5:
             Label(self.results_page,text="Practice makes perfect {},\nyou got {}/10 answers correct"
                  .format(self.student.student_name,self.student.score),fg=self.color[0]).grid(row=2)
-                 
+
     # Next button
         Button(self.results_page, text="Next",command= lambda:[self.student.store(),
                self.next_page(self.results_page),self.leaderboard()],fg=self.color[0],bg=self.color[2], 
@@ -291,7 +291,7 @@ class Interface:
                     ("4th", "User d", "7/10"),
                     ("5th", "User e", "5/10")]
 
-    # new frame for leaderboard to prevent irregular spacing of the entry widgets
+    # New frame for leaderboard to prevent irregular spacing of the entry widgets
         self.leaderboard_frame = Frame(root,bg=self.color[1]) 
         self.formatting(self.leaderboard_frame)
         self.leaderboard_frame.grid_configure(padx=(0))
@@ -308,25 +308,15 @@ class Interface:
                     self.e.config(bg=self.color[0],highlightbackground=self.color[0],fg=self.color[1])
 
     # restart button
-        self.restartb = Button(self.leaderboard_frame, text="Restart",command= lambda:
-                              [self.reset_var(),self.next_page(self.leaderboard_page),self.next_page(self.leaderboard_frame),
-                               self.selection()], fg=self.color[0], bg=self.color[2], border=0, height=1, width=8)
+        self.restartb = Button(self.leaderboard_frame, text="Restart", fg=self.color[0], bg=self.color[2], border=0, height=1, width=8,
+                               command= lambda:[self.student.reset_var(),self.next_page(self.leaderboard_page),
+                                                self.next_page(self.leaderboard_frame), self.selection()])
         self.restartb.grid(row=8,column=0,sticky=E, pady=(30,10))
     # logout button
-        self.logoutb = Button(self.leaderboard_frame, text="Log out",command= lambda: [self.reset_var(),
-                              self.reset_user(),self.next_page(self.leaderboard_page),self.next_page(self.leaderboard_frame),
-                              self.__init__()], fg=self.color[0], bg=self.color[4], border=0, height=1, width=8)
+        self.logoutb = Button(self.leaderboard_frame, text="Log out", fg=self.color[0], bg=self.color[4], border=0, height=1, width=8, 
+                              command= lambda:[self.student.reset_var(), self.student.reset_user(), self.next_page(self.leaderboard_page),
+                                               self.next_page(self.leaderboard_frame), self.__init__()])
         self.logoutb.grid(row=8,column=4,sticky=W, pady=(30,10))
-
-# Resetting all variables for restart
-    def reset_var(self):
-        self.student.selected_questiontype = []
-        self.student.selected_difficulty = []
-        self.student.correct_answers = []
-        self.student.score = None
-# Resetting user name for logging out
-    def reset_user(self):
-        self.student.student_name = None
 
 Interface()
 root.mainloop() 
