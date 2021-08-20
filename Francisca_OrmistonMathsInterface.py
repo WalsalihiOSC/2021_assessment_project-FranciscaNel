@@ -1,7 +1,7 @@
 # CSC3 2021
 # Ormiston Computing Interface Class
 # Francisca Nel
-# Ver 16
+# Ver 17
 
 from Francisca_Math_operations_class import Mathop
 from Francisca_OrmistonMathsStudent import Student 
@@ -258,10 +258,10 @@ class Interface:
     # Results subheader- Header message changes depending on the score!
         if self.student.score > 4:
             Label(self.results_page,text="Good job {}, you got {}/10 answers correct".format
-                 (self.student.student_name,self.student.score),fg=self.color[0]).grid(row=2,pady=(0,50))
+                 (self.student.student_name,self.student.score),fg=self.color[0],bg=self.color[1]).grid(row=2,pady=(0,50))
         elif self.student.score < 5:
             Label(self.results_page,text="Practice makes perfect {},\nyou got {}/10 answers correct"
-                 .format(self.student.student_name,self.student.score),fg=self.color[0]).grid(row=2)
+                 .format(self.student.student_name,self.student.score),fg=self.color[0],bg=self.color[1]).grid(row=2)
 
     # Next button
         Button(self.results_page, text="Next",command= lambda:[self.student.store(),
@@ -282,14 +282,16 @@ class Interface:
         Label(self.leaderboard_page,text="{} on {} difficulty".format(self.questiontype, 
               self.difficulty),fg=self.color[0], bg=self.color[1],font=self.msg_size).grid(row=1,column=1)
 
-    # Placeholder data for the leaderboard
+    # The leaderboard data
+        self.lscores = [i[1] for i in self.student.high_scores]
+        self.lnames = [i[0] for i in self.student.high_scores]
         self.lst = ["placeholder","placeholder",
                     ("Place", "Name", "Score"),
-                    ("1st", "User a", "10/10"),
-                    ("2nd", "User b", "10/10"),
-                    ("3rd", "User c", "9/10"),
-                    ("4th", "User d", "7/10"),
-                    ("5th", "User e", "5/10")]
+                    ("1st",(self.lnames[0]),self.lscores[0]),
+                    ("2nd",(self.lnames[1]),self.lscores[1]),
+                    ("3rd",(self.lnames[2]),self.lscores[2]),
+                    ("4th",(self.lnames[3]),self.lscores[3]),
+                    ("5th",(self.lnames[4]),self.lscores[4])]
 
     # New frame for leaderboard to prevent irregular spacing of the entry widgets
         self.leaderboard_frame = Frame(root,bg=self.color[1]) 
