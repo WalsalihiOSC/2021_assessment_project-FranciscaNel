@@ -1,7 +1,7 @@
 # CSC3 2021
 # Ormiston Computing Math operations class
 # Francisca Nel
-# Ver 1
+# Ver 3
 
 import random
 
@@ -49,13 +49,13 @@ class Mathop:
     
     def subtraction(self):
             if self.difficulty == 'Easy':
-                self.n2 = random.randint(1,5)
-                self.n = random.randint(self.n2,5)
+                self.n = random.randint(1,5)
+                self.n2 = random.randint(self.n,5)
             elif self.difficulty == 'Intermediate':
-                self.n2 = random.randint(1,5)
-                self.n = random.randint(self.n2,10)
+                self.n = random.randint(1,5)
+                self.n2 = random.randint(self.n,10)
             elif self.difficulty == 'Hard':
-                self.n2 = random.randint(1,10)
-                self.n = random.randint(self.n2,15)
-            self.a = int(self.n - self.n2)
+                self.n = random.randint(1,10)
+                self.n2 = random.randint(self.n,15)
+            self.a = int(self.n2 - self.n)
         
