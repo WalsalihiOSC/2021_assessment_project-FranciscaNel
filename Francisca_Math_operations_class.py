@@ -1,7 +1,7 @@
 # CSC3 2021
 # Ormiston Computing Math operations class
 # Francisca Nel
-# Ver 3
+# Ver 4
 
 import random
 
@@ -37,8 +37,9 @@ class Mathop:
 
     def division(self):
         if self.difficulty == 'Easy':
-            self.n = random.randint(1,3)
-            self.n2 = self.n*(random.randint(1,3)) 
+            self.n = random.randint(1,3) # Divisor
+    # Divisor is multiplied by Dividend to prevent decimal number
+            self.n2 = self.n*(random.randint(1,3)) # Dividend
         elif self.difficulty == 'Intermediate':
             self.n = random.randint(1,5)
             self.n2 = self.n*(random.randint(1,5))
@@ -50,6 +51,7 @@ class Mathop:
     def subtraction(self):
             if self.difficulty == 'Easy':
                 self.n = random.randint(1,5)
+    # n restricted to being in range greater than n2 to prevent negative answers
                 self.n2 = random.randint(self.n,5)
             elif self.difficulty == 'Intermediate':
                 self.n = random.randint(1,5)
