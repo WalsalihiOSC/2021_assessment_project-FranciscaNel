@@ -1,7 +1,7 @@
 # CSC3 2021
 # Ormiston Computing Interface Class
 # Francisca Nel
-# Ver 18
+# Ver 20
 
 from Francisca_Math_operations_class import Mathop
 from Francisca_OrmistonMathsStudent import Student 
@@ -111,6 +111,7 @@ class Interface:
     # Next button
         self.nextb(self.selection_page, lambda:[self.check_qbutton_selected(self.selection_page),self.turnstr(),self.questions()])
         self.n.grid(row=4,column=4,pady=(50,0))
+        self.n.config(text="Start")
 
 # Function for selection of buttons to be used with question types and difficulties
     def selectionfunc(self,to_select,buttonlist,selection,row):
@@ -173,7 +174,7 @@ class Interface:
 
     def question_used(self, qt, page, smbl):
         self.questiontypeforq = qt
-        Label(page, text= str(self.maths.n2) + smbl + str(self.maths.n),
+        Label(page, text= (str(self.maths.n2) + smbl + str(self.maths.n) + ' ='),
               font=self.qsize, fg=self.color[0], bg=self.color[1]).grid(row=2, column=0, padx=(0,180))
 
 
@@ -299,8 +300,8 @@ class Interface:
                                width=12, fg=self.color[0], bg='#d9d9d9', border=0, highlightbackground="#d9d9d9", 
                                highlightthickness=5)
                 self.e.grid(row=r, column=c+1, pady=2, padx=2)
-                self.e.insert(END, self.student.leaderboard_data[r][c])
-                
+                self.e.insert(END, self.student.leaderboard_data[r][c]) 
+    
                 if r == 2: # Colouring the header dark grey
                     self.e.config(bg=self.color[0],highlightbackground=self.color[0],fg=self.color[1])
 
