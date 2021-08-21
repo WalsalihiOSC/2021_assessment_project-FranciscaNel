@@ -72,7 +72,7 @@ class Student:
                     self.high_scores.append(('',''))       
                 print(self.high_scores)
 
-            # ... converting the high scores to seperate lists ...
+            # ... converting the high scores and names to seperate lists ...
                 self.lscores = [i[1] for i in self.high_scores]
                 self.lnames = [i[0] for i in self.high_scores]
 
