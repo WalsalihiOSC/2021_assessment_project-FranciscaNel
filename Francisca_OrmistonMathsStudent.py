@@ -57,12 +57,10 @@ class Student:
 
         # splits the list into a tuple for the leaderboard
             content = [tuple(line.strip().split()) for line in c] 
-
         # Sort the text file converted to list into 5 highest scores
             content.sort(key=lambda x : int(x[1])) # sorts from index 1 of tuple
             content.reverse()
             print(content)
-
         # prevent index error by filling in empty tuples until 5 elements in list
             if len(content) > 5:
                 self.high_scores = content[0:5]
@@ -70,21 +68,19 @@ class Student:
                 self.high_scores = content
                 while len(self.high_scores) < 5:
                     self.high_scores.append(('',''))       
-                print(self.high_scores)
+            print(self.high_scores)
+        # ... converting the high scores to seperate lists ...
+            self.lscores = [i[1] for i in self.high_scores]
+            self.lnames = [i[0] for i in self.high_scores]
 
-            # ... converting the high scores and names to seperate lists ...
-                self.lscores = [i[1] for i in self.high_scores]
-                self.lnames = [i[0] for i in self.high_scores]
-
-            # The leaderboard data
-                self.leaderboard_data = [
-                "placeholder","placeholder",
-                ("Place", "Name", "Score"),
-                ("1st",(self.lnames[0]),self.lscores[0]),
-                ("2nd",(self.lnames[1]),self.lscores[1]),
-                ("3rd",(self.lnames[2]),self.lscores[2]),
-                ("4th",(self.lnames[3]),self.lscores[3]),
-                ("5th",(self.lnames[4]),self.lscores[4])]
+        # The leaderboard data
+            self.leaderboard_data = ["placeholder","placeholder",
+                                    ("Place", "Name", "Score"),
+                                    ("1st",(self.lnames[0]),self.lscores[0]),
+                                    ("2nd",(self.lnames[1]),self.lscores[1]),
+                                    ("3rd",(self.lnames[2]),self.lscores[2]),
+                                    ("4th",(self.lnames[3]),self.lscores[3]),
+                                    ("5th",(self.lnames[4]),self.lscores[4])]
 
 # Resetting student data for restart
     def reset_var(self):
