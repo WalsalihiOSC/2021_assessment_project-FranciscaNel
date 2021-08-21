@@ -42,8 +42,7 @@ class Interface:
         self.logotitle.photo = self.img
         self.logotitle.grid()
     # Title
-        Label(self.name_page,text="Ormiston Maths",fg=self.color[4],bg=self.color[1],
-              font=self.title_size).grid(row=1)
+        Label(self.name_page,text="Ormiston Maths",fg=self.color[4],bg=self.color[1],font=self.title_size).grid(row=1)
     # Labels
         Label(self.name_page,text="Name",fg=self.color[0],bg=self.color[1]).grid(row=2,pady=(20),padx=(0,400))
     # Text boxes
@@ -51,16 +50,26 @@ class Interface:
                                   highlightbackground = self.color[0], highlightthickness=5)
         self.student_name.grid(row=2,padx=(120,0))
     # Buttons
-        Button(self.name_page,command=lambda:[self.check_name_input(self.name_page)], text="Next",
-               fg=self.color[0],bg=self.color[2], border=0, height=1, width=8).grid(row=4,column=2,pady=(20,0))
+        self.nextb(self.name_page,lambda:[self.check_name_input(self.name_page)])
+        self.n.grid(row=4,column=2,pady=(20,0))
+
+##### BUTTONS & LABELS #####
+    def nextb(self,page,cmd):
+        self.n = Button(page,command=cmd,text="Next",fg=self.color[0],bg=self.color[2],border=0,height=1,width=8)
 
 # Checks if the name has input. (there is no checking of integer input in the name)
-    def check_name_input(self,cpage):
-        self.checkname = False         
-        if not self.student_name.get():
-            messagebox.showerror(title='Error',message='Please enter your name')  
+    def check_name_input(self,cpage):     
+        if not self.student_name.get(): 
+            messagebox.showerror(title='Error',message='Please enter your name')
+        elif len(self.student_name.get()) > 12: 
+            messagebox.showerror(title='Error',message='Name must be below 12 letters')
+        elif len(self.student_name.get()) < 2: 
+            messagebox.showerror(title='Error',message='Name must be over 1 letter')
+    # isalpha() returns True when it detects letters 
+        elif not self.student_name.get().isalpha(): 
+            messagebox.showerror(title='Error',message='Name must be in letters only!')
         else:
-            sn = self.student_name.get()
+            sn = self.student_name.get().capitalize() # every name capitalized for consistency
             self.student = Student(sn)
             self.next_page(cpage) 
             self.selection()
@@ -100,9 +109,8 @@ class Interface:
         self.selectionfunc(self.student.difficulties, self.diffbuttons, self.student.selected_difficulty, 3)
     
     # Next button
-        Button(self.selection_page, text="Next", fg=self.color[0], bg=self.color[2], border=0, height=1, width=8, 
-               command=lambda: [self.check_qbutton_selected(self.selection_page), self.turnstr(), self.questions()]
-               ).grid(row=4,column=4,pady=(50,0))
+        self.nextb(self.selection_page, lambda:[self.check_qbutton_selected(self.selection_page),self.turnstr(),self.questions()])
+        self.n.grid(row=4,column=4,pady=(50,0))
 
 # Function for selection of buttons to be used with question types and difficulties
     def selectionfunc(self,to_select,buttonlist,selection,row):
@@ -188,10 +196,8 @@ class Interface:
         self.answer.grid(row=2,padx=(250,0))
     
     # Next button hidden under check button
-    # Every time 'Next' is pressed, question function is called until f=10 frames 
-        self.nextb = Button(self.page, text="Next",command=lambda:[self.question_number(),self.next_page
-                           (self.page),self.questions()],fg=self.color[0],bg=self.color[2], border=0, height=1, width=8)
-        self.nextb.grid(row=4,column=1,pady=(80,0))
+        self.nextb(self.page,lambda:[self.question_number(),self.next_page(self.page),self.questions()])
+        self.n.grid(row=4,column=1,pady=(80,0))
 
     # Check button
         self.checkb = Button(self.page, command=lambda:[self.checkanswer(self.page)], text="Check",
@@ -200,6 +206,7 @@ class Interface:
 
     # determines type of question to be used in the rest of the 10 questions
         self.questiontypeforquestions(self.page)
+    # Every time 'Next' is pressed, question function is called until f=10 frames 
         if self.f == 11:
             self.next_page(self.page)
             self.results()
@@ -264,9 +271,8 @@ class Interface:
                  .format(self.student.student_name,self.student.score),fg=self.color[0],bg=self.color[1]).grid(row=2)
 
     # Next button
-        Button(self.results_page, text="Next",command= lambda:[self.student.store(),
-               self.next_page(self.results_page),self.leaderboard()],fg=self.color[0],bg=self.color[2], 
-               border=0, height=1, width=8).grid(row=3,sticky=E)
+        self.nextb(self.results_page,lambda:[self.student.store(),self.next_page(self.results_page),self.leaderboard()])
+        self.n.grid(row=3,sticky=E)
 
 ######################################## PAGE 15 #######################################
 #################################### Leaderboard Page ##################################
