@@ -1,7 +1,7 @@
 # CSC3 2021
 # Ormiston Computing Interface Class
 # Francisca Nel
-# Ver 17
+# Ver 18
 
 from Francisca_Math_operations_class import Mathop
 from Francisca_OrmistonMathsStudent import Student 
@@ -282,17 +282,6 @@ class Interface:
         Label(self.leaderboard_page,text="{} on {} difficulty".format(self.questiontype, 
               self.difficulty),fg=self.color[0], bg=self.color[1],font=self.msg_size).grid(row=1,column=1)
 
-    # The leaderboard data
-        self.lscores = [i[1] for i in self.student.high_scores]
-        self.lnames = [i[0] for i in self.student.high_scores]
-        self.lst = ["placeholder","placeholder",
-                    ("Place", "Name", "Score"),
-                    ("1st",(self.lnames[0]),self.lscores[0]),
-                    ("2nd",(self.lnames[1]),self.lscores[1]),
-                    ("3rd",(self.lnames[2]),self.lscores[2]),
-                    ("4th",(self.lnames[3]),self.lscores[3]),
-                    ("5th",(self.lnames[4]),self.lscores[4])]
-
     # New frame for leaderboard to prevent irregular spacing of the entry widgets
         self.leaderboard_frame = Frame(root,bg=self.color[1]) 
         self.formatting(self.leaderboard_frame)
@@ -304,15 +293,14 @@ class Interface:
                                width=12, fg=self.color[0], bg='#d9d9d9', border=0, highlightbackground="#d9d9d9", 
                                highlightthickness=5)
                 self.e.grid(row=r, column=c+1, pady=2, padx=2)
-                self.e.insert(END, self.lst[r][c])
+                self.e.insert(END, self.student.leaderboard_data[r][c])
                 
                 if r == 2: # Colouring the header dark grey
                     self.e.config(bg=self.color[0],highlightbackground=self.color[0],fg=self.color[1])
 
     # restart button
-        self.restartb = Button(self.leaderboard_frame, text="Restart", fg=self.color[0], bg=self.color[2], border=0, height=1, width=8,
-                               command= lambda:[self.student.reset_var(),self.next_page(self.leaderboard_page),
-                                                self.next_page(self.leaderboard_frame), self.selection()])
+        self.restartb = Button(self.leaderboard_frame, text="Restart", fg=self.color[0], bg=self.color[2], border=0, height=1, width=8, command= lambda:[
+                               self.student.reset_var(),self.next_page(self.leaderboard_page), self.next_page(self.leaderboard_frame), self.selection()])
         self.restartb.grid(row=8,column=0,sticky=E, pady=(30,10))
     # logout button
         self.logoutb = Button(self.leaderboard_frame, text="Log out", fg=self.color[0], bg=self.color[4], border=0, height=1, width=8, 
