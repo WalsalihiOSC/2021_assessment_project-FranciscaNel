@@ -62,7 +62,6 @@ class Student:
         # Sort the text file converted to list into 5 highest scores
             content.sort(key=lambda x : int(x[1])) # sorts from index 1 of tuple
             content.reverse()
-            print(content)
         # prevent index error by filling in empty tuples until 5 elements in list
             if len(content) > 5:
                 self.high_scores = content[0:5]
