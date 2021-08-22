@@ -9,10 +9,12 @@ class Student:
     # storing questiontype/difficulty  
         self.selected_questiontype = [] 
         self.selected_difficulty = []
+        self.questionlist = [] # Used later for printing all answers
     # store incorrect answers and correct answers for the scores
         self.correct_answers = []
         self.score = 0
     # question types and difficulties
+        self.qtypes_smbl = ['Addition\n➕','Times\n✖','Division\n➗','Subtraction\n▬']
         self.qtypes = ['Addition','Times','Division','Subtraction']
         self.difficulties = ['Easy','Intermediate','Hard']
         
@@ -75,12 +77,12 @@ class Student:
 
         # The leaderboard data
             self.leaderboard_data = ["placeholder","placeholder",
-                                    ("Place", "Name", "Score"),
-                                    ("1st",(self.lnames[0]),self.lscores[0]),
-                                    ("2nd",(self.lnames[1]),self.lscores[1]),
-                                    ("3rd",(self.lnames[2]),self.lscores[2]),
-                                    ("4th",(self.lnames[3]),self.lscores[3]),
-                                    ("5th",(self.lnames[4]),self.lscores[4])]
+                                    ("Name", "Score", "Place"),
+                                    ((self.lnames[0]),self.lscores[0],"1st"),
+                                    ((self.lnames[1]),self.lscores[1],"2nd"),
+                                    ((self.lnames[2]),self.lscores[2],"3rd"),
+                                    ((self.lnames[3]),self.lscores[3],"4th"),
+                                    ((self.lnames[4]),self.lscores[4],"5th")]
 
 # Resetting student data for restart
     def reset_var(self):
