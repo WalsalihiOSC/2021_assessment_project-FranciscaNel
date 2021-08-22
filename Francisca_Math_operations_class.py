@@ -13,8 +13,8 @@ class Mathop:
 
     def addition(self):
         if self.difficulty == 'Easy':
-            self.n = random.randint(1,3)
-            self.n2 = random.randint(0,3)
+            self.n = random.randint(0,3)
+            self.n2 = random.randint(0,2)
         elif self.difficulty == 'Intermediate':
             self.n = random.randint(0,10)
             self.n2 = random.randint(1,5)
@@ -25,7 +25,7 @@ class Mathop:
 
     def multiplication(self):
         if self.difficulty == 'Easy':
-            self.n = random.randint(0,5)
+            self.n = random.randint(0,3)
             self.n2 = random.randint(1,2)
         elif self.difficulty == 'Intermediate':
             self.n = random.randint(0,5)
@@ -57,7 +57,7 @@ class Mathop:
                 self.n = random.randint(1,5)
                 self.n2 = random.randint(self.n,10)
             elif self.difficulty == 'Hard':
-                self.n = random.randint(1,10)
+                self.n = random.randint(5,15)
                 self.n2 = random.randint(self.n,15)
             self.a = int(self.n2 - self.n)
         
