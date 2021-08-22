@@ -57,6 +57,7 @@ class Interface:
     def nextb(self,page,cmd):
         self.n = Button(page,command=cmd,text="Next",fg=self.color[0],bg=self.color[2],border=0,height=1,width=8)
 
+
 # Checks if the name has input. (there is no checking of integer input in the name)
     def check_name_input(self,cpage):     
         if not self.student_name.get(): 
@@ -96,7 +97,9 @@ class Interface:
         self.formatting(self.selection_page)
         self.selection_page.grid_configure(padx=(0,0),pady=(20,0))
     # checking if name is saved to student class
-        print('name is:',self.student.student_name) 
+        print('name is:',self.student.student_name)
+
+    # Button list to be printed
         self.qtypesbuttons = [] # qtypes = question types, i.e: addition, subtraction...
         self.diffbuttons = [] # diff = difficulty, i.e: easy, hard...
 
@@ -110,7 +113,7 @@ class Interface:
     
     # Next button
         self.nextb(self.selection_page, lambda:[self.check_qbutton_selected(self.selection_page),self.turnstr(),self.questions()])
-        self.n.grid(row=4,column=4,pady=(50,0))
+        self.n.grid(row=4,column=4)
         self.n.config(text="Start")
 
 # Function for selection of buttons to be used with question types and difficulties
@@ -120,20 +123,23 @@ class Interface:
         c = 0 # column
         r = row 
         for i in range(len(to_select)):
-            t = to_select[i]
+            if to_select == self.student.qtypes:
+                t = self.student.qtypes_smbl[i] # seperate list containing question type symbols
+            else:
+                t = to_select[i]
             buttonlist.append(Button(self.selection_page, text=t, command=lambda p=i:
                               self.button_pressed(p,to_select,buttonlist,selection)))
             if c < 4:
                 c = c + 1
             buttonlist[i].grid(column=c, row=r, padx=(8),pady=8)
-            buttonlist[i].config(width=10,height=1,bg=self.color[4], fg=self.color[0], border=0, 
+            buttonlist[i].config(width=10,height=2,bg=self.color[4], fg=self.color[0], border=0, 
                                  highlightthickness=5)
 
 # checks if button is pressed by detecting button colour as green or orange
     def button_pressed(self, sel, to_select, buttonlist,selection):
         b = buttonlist[sel]
         selq = to_select[sel]
-    # If the button is clicked while green, the selection is removed from the list
+    # If the button is clicked while green, turned orange and removed from the list
         if b.cget('bg') == self.color[5] :
             b.config(bg= self.color[4], fg=self.color[0])
             selection.remove(selq) 
@@ -171,11 +177,17 @@ class Interface:
         elif self.questiontype=='Times': self.question_used(self.maths.multiplication(),page,' x ')
         elif self.questiontype=='Division': self.question_used(self.maths.division(),page,' ÷ ')
         elif self.questiontype=='Subtraction': self.question_used(self.maths.subtraction(),page,' - ')
+    # Stringing together the answers
+        self.qanswers = (self.qtext + str(self.maths.a)) 
+        self.student.questionlist.append(self.qanswers) 
+        print(self.student.questionlist)
+        print(len(self.student.questionlist))
 
     def question_used(self, qt, page, smbl):
         self.questiontypeforq = qt
-        Label(page, text= (str(self.maths.n2) + smbl + str(self.maths.n) + ' ='),
-              font=self.qsize, fg=self.color[0], bg=self.color[1]).grid(row=2, column=0, padx=(0,180))
+        self.qtext = (str(self.maths.n2) + smbl + str(self.maths.n) + ' = ')
+        self.question = Label(page, text=self.qtext, font=self.qsize, fg=self.color[0], bg=self.color[1])
+        self.question.grid(row=2, column=0, padx=(0,180))
 
 
 ######################################## PAGE 3-13 #######################################
@@ -205,8 +217,9 @@ class Interface:
                              fg=self.color[0],bg=self.color[2], border=0, height=1, width=8)
         self.checkb.grid(row=4,column=1,pady=(80,0))
 
-    # determines type of question to be used in the rest of the 10 questions
+    # determines type of question to be used in the rest of the 10 questions (responsible for printing questions)
         self.questiontypeforquestions(self.page)
+
     # Every time 'Next' is pressed, question function is called until f=10 frames 
         if self.f == 11:
             self.next_page(self.page)
@@ -223,7 +236,7 @@ class Interface:
 # check whether answer was correct, incorrect, or invalid
     def checkanswer(self,page):
         checknum = True
-        
+
     # Check input, return error if string
         try:
             self.ans = int(self.answer.get())
@@ -234,20 +247,20 @@ class Interface:
     # Check input if correct/incorrect to answer
         if checknum == True:
             if int(self.ans) == self.maths.a: # Correct
-                Label(page,text="Correct!",fg=self.color[2],font=self.msg_size).grid(row=3,pady=(10,0))
+                Label(page,text="Correct!",fg=self.color[2],bg=self.color[1],font=self.msg_size).grid(row=3,pady=(10,0))
                 self.answer.configure(bg=self.color[2]) # Turn answer entry box green
             # Add to correct answer list to calculate score
                 self.student.correct_answers.append(self.ans) 
             # Tick symbol added
-                Label(self.page,text='✔',fg=self.color[2],font=self.symbl_size).grid(row=2,column=1) 
+                Label(self.page,text='✔',fg=self.color[2],font=self.symbl_size,bg=self.color[1]).grid(row=2,column=1) 
                 self.remove_check()
 
             if int(self.ans) != self.maths.a: # Incorrect
-                Label(page,text="Incorrect, the answer is {}".format(self.maths.a),fg=self.color[3],
+                Label(page,text="Incorrect, the answer is {}".format(self.maths.a),fg=self.color[3],bg=self.color[1],
                       font=self.msg_size).grid(row=3,pady=(10,0))
                 self.answer.configure(bg=self.color[3]) # Turn answer entry box red
             # Cross symbol added
-                Label(self.page,text='✘',fg=self.color[3],font=self.symbl_size).grid(row=2,column=1) 
+                Label(self.page,text='✘',fg=self.color[3],bg=self.color[1],font=self.symbl_size).grid(row=2,column=1) 
                 self.remove_check()
 
 ######################################## PAGE 14 #######################################
@@ -273,7 +286,39 @@ class Interface:
 
     # Next button
         self.nextb(self.results_page,lambda:[self.student.store(),self.next_page(self.results_page),self.leaderboard()])
-        self.n.grid(row=3,sticky=E)
+        self.n.grid(row=3,sticky=E,pady=(10,0))
+    # Answers button
+        self.ansb = Button(self.results_page, text='Answers✔', bg=self.color[2], fg=self.color[0], border=0, highlightthickness=5,
+        command=lambda:[self.next_page(self.results_page),self.answers()])
+        self.ansb.grid(row=0,sticky=W)
+
+########################################################################################
+###################################### Answers Page ####################################
+
+    def answers(self):
+        self.answers_page = Frame(root, bg=self.color[1])
+        self.formatting(self.answers_page)
+        self.answers_page.config(padx=0)
+    # Title
+        Label(self.answers_page,text="Answers",fg=self.color[4], bg=self.color[1],
+              font=self.qsize).grid(row=0,column=2)
+        i = 0
+        r = 0
+        c = 0
+        p = 0
+        for i in range(10):
+            t = self.student.questionlist[i]
+            r = r + 1
+            l = Label(self.answers_page, text=t, fg=self.color[5], bg=self.color[1], font=self.msg_size)
+            l.grid(row=r, column=c+1, padx=p)
+            if r == 5:
+                c = 3
+                r = 0
+            if c == 3: p = (0,150)
+
+    # Back button
+        Button(self.answers_page, text=' Back ', bg=self.color[4], fg=self.color[0], border=0, highlightthickness=5,
+               command=lambda:[self.next_page(self.answers_page),self.results()]).grid(sticky=SE,column=2,padx=(0,50))
 
 ######################################## PAGE 15 #######################################
 #################################### Leaderboard Page ##################################
@@ -282,7 +327,6 @@ class Interface:
         self.leaderboard_page = Frame(root, bg=self.color[1])
         self.formatting(self.leaderboard_page)
         self.leaderboard_page.grid_configure(padx=(0))
-
     # Title
         Label(self.leaderboard_page,text="Leaderboard",fg=self.color[4], bg=self.color[1],
               font=self.qsize).grid(row=0,column=1)
@@ -293,17 +337,27 @@ class Interface:
         self.leaderboard_frame = Frame(root,bg=self.color[1]) 
         self.formatting(self.leaderboard_frame)
         self.leaderboard_frame.grid_configure(padx=(0))
-
+        self.user_row = 0 
         for r in range(2,8): # iteration for rows (6)
             for c in range(3): # iteration for columns(3) 
-                self.e = Entry(self.leaderboard_frame, justify='center', font='CenturyGothic 18 bold', 
-                               width=12, fg=self.color[0], bg='#d9d9d9', border=0, highlightbackground="#d9d9d9", 
-                               highlightthickness=5)
-                self.e.grid(row=r, column=c+1, pady=2, padx=2)
-                self.e.insert(END, self.student.leaderboard_data[r][c]) 
-    
-                if r == 2: # Colouring the header dark grey
-                    self.e.config(bg=self.color[0],highlightbackground=self.color[0],fg=self.color[1])
+                e = Entry(self.leaderboard_frame, justify='center', font='CenturyGothic 18 bold', 
+                               width=12, border=0, highlightbackground="#d9d9d9", highlightthickness=5)
+                e.grid(row=r, column=c+1, pady=2, padx=2)
+                e.insert(END, self.student.leaderboard_data[r][c]) 
+
+            # getting each entry's input. 
+                getted = e.get()
+            # if it detects current user's name, their row is saved to variable
+                if getted == self.student.student_name:
+                    self.user_row = int(e.grid_info()['row'])
+            # set leaderboard entries to read-only
+                e.config(state=DISABLED, disabledbackground='#d9d9d9', disabledforeground=self.color[0])
+            # Colouring the header dark grey
+                if r == 2: 
+                    e.config(disabledbackground=self.color[0], highlightbackground=self.color[0], disabledforeground=self.color[1])
+            # colouring current user's rows green (all rows with same name)
+                if r == self.user_row:
+                        e.config(disabledbackground=self.color[5], highlightbackground=self.color[5], disabledforeground=self.color[1])
 
     # restart button
         self.restartb = Button(self.leaderboard_frame, text="Restart", fg=self.color[0], bg=self.color[2], border=0, height=1, width=8, command= lambda:[
