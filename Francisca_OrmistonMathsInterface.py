@@ -180,8 +180,6 @@ class Interface:
     # Stringing together the answers
         self.qanswers = (self.qtext + str(self.maths.a)) 
         self.student.questionlist.append(self.qanswers) 
-        print(self.student.questionlist)
-        print(len(self.student.questionlist))
 
     def question_used(self, qt, page, smbl):
         self.questiontypeforq = qt
