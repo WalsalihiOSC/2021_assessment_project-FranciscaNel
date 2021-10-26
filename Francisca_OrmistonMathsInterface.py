@@ -1,7 +1,7 @@
 # CSC3 2021
 # Ormiston Computing Interface Class
 # Francisca Nel
-# Ver 20
+# Ver 22
 
 from Francisca_Math_operations_class import Mathop
 from Francisca_OrmistonMathsStudent import Student 
@@ -14,7 +14,7 @@ root.configure(bg='#EDEDED')
 root.grid_columnconfigure(0, weight=1)
 root.grid_rowconfigure(0, weight=1)
 root.title("Ormiston Maths")
-root.geometry("880x495") # small 16:9 ratio window (55x)
+root.geometry("880x550") # small 16:9 ratio window (55x)
 
 class Interface:
     def __init__(self):
@@ -45,12 +45,17 @@ class Interface:
         Label(self.name_page,text="Ormiston Maths",fg=self.color[4],bg=self.color[1],font=self.title_size).grid(row=1)
     # Labels
         Label(self.name_page,text="Name",fg=self.color[0],bg=self.color[1]).grid(row=2,pady=(20),padx=(0,400))
+        Label(self.name_page,text="Age",fg=self.color[0],bg=self.color[1]).grid(row=3,pady=(20),padx=(0,400))
     # Text boxes
         self.student_name = Entry(self.name_page, bg=self.color[0], fg=self.color[1], border=0, 
                                   highlightbackground = self.color[0], highlightthickness=5)
         self.student_name.grid(row=2,padx=(120,0))
+
+        self.student_age = Entry(self.name_page, bg=self.color[0], fg=self.color[1], border=0, 
+                                  highlightbackground = self.color[0], highlightthickness=5)
+        self.student_age.grid(row=3,padx=(120,0))
     # Buttons
-        self.nextb(self.name_page,lambda:[self.check_name_input(self.name_page)])
+        self.nextb(self.name_page,lambda:[self.check_name_age_input(self.name_page)])
         self.n.grid(row=4,column=2,pady=(20,0))
 
 ##### BUTTONS & LABELS #####
@@ -58,20 +63,33 @@ class Interface:
         self.n = Button(page,command=cmd,text="Next",fg=self.color[0],bg=self.color[2],border=0,height=1,width=8)
 
 
-# Checks if the name has input. (there is no checking of integer input in the name)
-    def check_name_input(self,cpage):     
-        if not self.student_name.get(): 
+# Checks if the name has input.
+    def check_name_age_input(self,cpage):
+        
+    # Check Age
+        if not self.student_age.get(): 
+            messagebox.showerror(title='Error',message='Please enter your age as a number between 5 and 12')
+        elif self.student_age.get().isalpha(): # isalpha() returns True when it detects letters 
+            messagebox.showerror(title='Error',message='Age must be in numbers only!\nPlease enter your age as a number between 5 and 12')
+        elif int(self.student_age.get()) > 12: 
+            messagebox.showerror(title='Error',message='Age is too high!\nPlease enter an age between 5 and 12')
+        elif int(self.student_age.get()) < 5: 
+            messagebox.showerror(title='Error',message='Age is too low!\nPlease enter an age between 5 and 12')
+
+    # Check Name
+        elif not self.student_name.get(): 
             messagebox.showerror(title='Error',message='Please enter your name')
         elif len(self.student_name.get()) > 12: 
             messagebox.showerror(title='Error',message='Name must be below 12 letters')
         elif len(self.student_name.get()) < 2: 
             messagebox.showerror(title='Error',message='Name must be over 1 letter')
-    # isalpha() returns True when it detects letters 
         elif not self.student_name.get().isalpha(): 
             messagebox.showerror(title='Error',message='Name must be in letters only!')
+
         else:
             sn = self.student_name.get().capitalize() # every name capitalized for consistency
-            self.student = Student(sn)
+            sa = self.student_age.get()
+            self.student = Student(sn,sa)
             self.next_page(cpage) 
             self.selection()
 
@@ -96,8 +114,9 @@ class Interface:
         self.selection_page = Frame(root, bg=self.color[1])
         self.formatting(self.selection_page)
         self.selection_page.grid_configure(padx=(0,0),pady=(20,0))
-    # checking if name is saved to student class
+    # checking if name and age is saved to student class
         print('name is:',self.student.student_name)
+        print('age is:',self.student.student_age)
 
     # Button list to be printed
         self.qtypesbuttons = [] # qtypes = question types, i.e: addition, subtraction...
@@ -180,6 +199,8 @@ class Interface:
     # Stringing together the answers
         self.qanswers = (self.qtext + str(self.maths.a)) 
         self.student.questionlist.append(self.qanswers) 
+        print(self.student.questionlist)
+        print(len(self.student.questionlist))
 
     def question_used(self, qt, page, smbl):
         self.questiontypeforq = qt
