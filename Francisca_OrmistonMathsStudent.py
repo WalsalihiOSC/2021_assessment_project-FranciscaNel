@@ -1,11 +1,12 @@
 # CSC3 2021
 # Ormiston Computing Student Class
 # Francisca Nel
-# Ver 10
+# Ver 11
 
 class Student:
-    def __init__(self,sn):
+    def __init__(self,sn,sa):
         self.student_name = sn
+        self.student_age = sa
     # storing questiontype/difficulty  
         self.selected_questiontype = [] 
         self.selected_difficulty = []
@@ -62,6 +63,7 @@ class Student:
         # Sort the text file converted to list into 5 highest scores
             content.sort(key=lambda x : int(x[1])) # sorts from index 1 of tuple
             content.reverse()
+            print(content)
         # prevent index error by filling in empty tuples until 5 elements in list
             if len(content) > 5:
                 self.high_scores = content[0:5]
@@ -88,6 +90,7 @@ class Student:
         self.selected_questiontype = []
         self.selected_difficulty = []
         self.correct_answers = []
+        self.questionlist = []
         self.score = None
 
 # Resetting user name for logging out
